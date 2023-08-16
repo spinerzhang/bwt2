@@ -1,0 +1,71 @@
+#!/bin/bash
+#set -x #echo on
+
+echo "Testing begins ..."
+echo ""
+
+
+rm -f *.o bwtsearch *.out *.idx
+
+# COMPILE
+make
+
+# SEARCH
+if [ -f bwtsearch ] ; then
+
+    ./bwtsearch ~cs9319/a2/small1.rlb small1.idx "ban" > test1.out
+    ./bwtsearch ~cs9319/a2/small1.rlb small1.idx "an" > test2.out
+    ./bwtsearch ~cs9319/a2/small1.rlb small1.idx "and" > test3.out
+    ./bwtsearch ~cs9319/a2/small1.rlb small1.idx "in" > test4.out
+    ./bwtsearch ~cs9319/a2/small1.rlb small1.idx "ing" > test5.out
+
+    ./bwtsearch ~cs9319/a2/small2.rlb small2.idx "NY" > test6.out
+    ./bwtsearch ~cs9319/a2/small2.rlb small2.idx "Ship" > test7.out
+    ./bwtsearch ~cs9319/a2/small2.rlb small2.idx "Nov" > test8.out
+    ./bwtsearch ~cs9319/a2/small2.rlb small2.idx "an internal change" > test9.out
+    ./bwtsearch ~cs9319/a2/small2.rlb small2.idx "software" > test10.out
+
+    ./bwtsearch ~cs9319/a2/medium1.rlb medium1.idx "database" > test11.out
+    ./bwtsearch ~cs9319/a2/medium1.rlb medium1.idx "Thesis" > test12.out
+    ./bwtsearch ~cs9319/a2/medium1.rlb medium1.idx "ata" > test13.out
+    ./bwtsearch ~cs9319/a2/medium1.rlb medium1.idx "to" > test14.out
+    ./bwtsearch ~cs9319/a2/medium1.rlb medium1.idx "relational database" > test15.out
+
+    ./bwtsearch ~cs9319/a2/medium2.rlb medium2.idx "Data" > test16.out
+    ./bwtsearch ~cs9319/a2/medium2.rlb medium2.idx "and" > test17.out
+    ./bwtsearch ~cs9319/a2/medium2.rlb medium2.idx "comput" > test18.out
+    ./bwtsearch ~cs9319/a2/medium2.rlb medium2.idx "the" > test19.out
+    ./bwtsearch ~cs9319/a2/medium2.rlb medium2.idx "Texture registration for 3D models." > test20.out
+
+    ./bwtsearch ~cs9319/a2/large1.rlb large1.idx "compress" > test21.out
+    ./bwtsearch ~cs9319/a2/large1.rlb large1.idx "Web" > test22.out
+    ./bwtsearch ~cs9319/a2/large1.rlb large1.idx "stem" > test23.out
+    ./bwtsearch ~cs9319/a2/large1.rlb large1.idx "learn" > test24.out
+    ./bwtsearch ~cs9319/a2/large1.rlb large1.idx "g of" > test25.out
+
+    ./bwtsearch ~cs9319/a2/large2.rlb large2.idx "Cobol" > test26.out
+    ./bwtsearch ~cs9319/a2/large2.rlb large2.idx "Networking" > test27.out
+    ./bwtsearch ~cs9319/a2/large2.rlb large2.idx "Search" > test28.out
+    ./bwtsearch ~cs9319/a2/large2.rlb large2.idx "Database" > test29.out
+    ./bwtsearch ~cs9319/a2/large2.rlb large2.idx "und " > test30.out    
+    
+    for ((k=1;k<31;++k))
+    do
+	touch test$k.out
+	correct=`eval diff -q ~cs9319/a2/ans/ans$k.txt test$k.out`
+	if [ -z "$correct" ]; then
+	    echo "test$k: CORRECT"
+	else
+	    echo "test$k: FAILED"
+	fi
+    done
+
+    echo ""
+    echo "Testing - total 30 tests,"
+    echo "You can find out each test's query by 'cat ~cs9319/a2/automark'"
+    echo ""
+
+else
+    echo "Failed to make bwtsearch."
+fi
+
